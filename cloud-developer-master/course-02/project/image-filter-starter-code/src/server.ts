@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { filterImageFromURL, deleteLocalFiles } from './util/util';
 
 (async () => {
 
@@ -9,7 +9,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   // Set the network port
   const port = process.env.PORT || 8082;
-  
+
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
@@ -30,17 +30,33 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   //! END @TODO1
-  
+
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
-  } );
-  
+  // http://localhost:8082/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
+  app.get("/filteredimage", async (req, res) => {
+    console.log('req', req.query.image_url);
+    // 1. validate the image_url query
+    if (req.query.image_url) {
+      // 2. call filterImageFromURL(image_url) to filter the image
+      filterImageFromURL(req.query.image_url).then(response => {
+        res.status(200).sendFile(response);
+        // deleteLocalFiles([response]);
+      },
+        (err) => {
+          res.status(400).send(`Filtered image from image_url=${req.query.image_url} is failed!`);
+          console.log('err', err)
+        }
+      );
+    } else {
+      res.status(406).send("try GET /filteredimage?image_url={{}}, image_url is required!");
+    }
+  });
+
 
   // Start the Server
-  app.listen( port, () => {
-      console.log( `server running http://localhost:${ port }` );
-      console.log( `press CTRL+C to stop server` );
-  } );
+  app.listen(port, () => {
+    console.log(`server running http://localhost:${port}`);
+    console.log(`press CTRL+C to stop server`);
+  });
 })();
