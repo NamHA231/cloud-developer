@@ -34,17 +34,17 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
   // Root Endpoint
   // Displays a simple message to the user
   // http://localhost:8082/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
-  app.get("/filteredimage", async (req, res) => {
+  app.get("/filteredimage", async (req:express.Request, res:express.Response) => {
     console.log('req', req.query.image_url);
     // 1. validate the image_url query
     if (req.query.image_url) {
       // 2. call filterImageFromURL(image_url) to filter the image
       let imageUrl = req.query.image_url.toString();
-      filterImageFromURL(imageUrl).then(response => {
+      filterImageFromURL(imageUrl).then((response: string) => {
         res.status(200).sendFile(response);
         // deleteLocalFiles([response]);
       },
-        (err) => {
+        (err: Error) => {
           res.status(400).send(`Filtered image from image_url=${req.query.image_url} is failed!`);
           console.log('err', err)
         }
