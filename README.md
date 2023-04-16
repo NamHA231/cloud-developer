@@ -1,1 +1,2 @@
 # cloud-developer
+# endpoint URL: http://image-filter-starter-code-dev222222222222.us-east-1.elasticbeanstalk.com/filteredimage?image_url=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fb%2Fbd%2FGolden_tabby_and_white_kitten_n01.jpg
