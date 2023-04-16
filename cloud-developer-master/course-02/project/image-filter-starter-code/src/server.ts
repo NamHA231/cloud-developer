@@ -39,7 +39,8 @@ import { filterImageFromURL, deleteLocalFiles } from './util/util';
     // 1. validate the image_url query
     if (req.query.image_url) {
       // 2. call filterImageFromURL(image_url) to filter the image
-      filterImageFromURL(req.query.image_url).then(response => {
+      let imageUrl = req.query.image_url.toString();
+      filterImageFromURL(imageUrl).then(response => {
         res.status(200).sendFile(response);
         // deleteLocalFiles([response]);
       },
